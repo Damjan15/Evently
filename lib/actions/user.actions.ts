@@ -3,10 +3,10 @@
 import { CreateUserParams, UpdateUserParams } from "@/types";
 import { handleError } from "../utils";
 import { connectToDatabase } from "../mongodb/database";
-import User from "../mongodb/models/user.model";
-import Order from "../mongodb/models/order.model";
+import User from "../mongodb/database/models/user.model";
+import Order from "../mongodb/database/models/order.model";
 import { revalidatePath } from "next/cache";
-import Event from "../mongodb/models/event.model";
+import Event from "../mongodb/database/models/event.model";
 
 export const createUser = async (user: CreateUserParams) => {
   try {
