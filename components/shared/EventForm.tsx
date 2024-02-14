@@ -35,13 +35,11 @@ const EventForm = ({ userId, type }: EventFormProps) => {
   const initialValues = eventDefaultValues;
   const [files, setFiles] = useState<File[]>([]);
 
-  // 1. Define your form.
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: initialValues,
   });
 
-  // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof eventFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
@@ -257,6 +255,8 @@ const EventForm = ({ userId, type }: EventFormProps) => {
                               <Checkbox
                                 id="isFree"
                                 className="mr-2 h-5 w-5 border-2 border-primary-500"
+                                onCheckedChange={field.onChange}
+                                checked={field.value}
                               />
                             </div>
                           </FormControl>
@@ -297,8 +297,13 @@ const EventForm = ({ userId, type }: EventFormProps) => {
           />
         </div>
 
-        <Button type="submit" size="lg" disabled={form.formState.isSubmitting} className="button col-span-2 w-full">
-          { form.formState.isSubmitting ? "Submitting..." : `${type} Event`}
+        <Button
+          type="submit"
+          size="lg"
+          disabled={form.formState.isSubmitting}
+          className="button col-span-2 w-full"
+        >
+          {form.formState.isSubmitting ? "Submitting..." : `${type} Event`}
         </Button>
       </form>
     </Form>
