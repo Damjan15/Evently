@@ -1,11 +1,12 @@
 "use server";
 
-import { CreateEventParams, GetAllEventsParams } from "@/types";
+import { CreateEventParams, DeleteEventParams, GetAllEventsParams } from "@/types";
 import { handleError } from "../utils";
 import { connectToDatabase } from "../mongodb/database";
 import User from "../mongodb/database/models/user.model";
 import Event from "../mongodb/database/models/event.model";
 import Category from "../mongodb/database/models/category.model";
+import { revalidatePath } from "next/cache";
 
 const populateEvent = async(query: any) => {
     return query.populate({path: 'organizer', model: User, select: '_id firstName lastName' })
@@ -63,6 +64,20 @@ export const getAllEvents = async function ({ query, limit = 6, page, category }
         return {
             data: JSON.parse(JSON.stringify(events)),
             totalPages: Math.ceil(eventsCount / limit),
+        }
+    } catch (error) {
+        handleError(error);
+    }
+}
+
+export const deleteEvent = async function ({ eventId, path }: DeleteEventParams) {
+    try {
+        await connectToDatabase();
+
+        const deleteEvent = await Event.findByIdAndDelete(eventId);
+
+        if (deleteEvent) {
+            revalidatePath(path)
         }
     } catch (error) {
         handleError(error);
