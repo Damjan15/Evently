@@ -1,4 +1,5 @@
 import { IEvent } from "@/lib/mongodb/database/models/event.model"
+import Card from "./Card"
 
 type CollectionProps = {
     data: IEvent[],
@@ -24,7 +25,7 @@ const Collection = ({ data, emptyTitle, emptyStateSubtext, page, totalPages = 0,
 
                         return (
                             <li key={event._id} className="flex justify-center">
-                                { event.title }
+                                <Card event={event} hasOrderLink={hasOrderLink} hidePrice={hidePrice} />
                             </li>
                         )
                     })}
